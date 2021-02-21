@@ -368,7 +368,15 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
   handleFiles = (files: File[]) => {
     files.forEach((f, i) => this.handleFile(f, `${new Date().getTime()}-${i}`))
     const { current } = this.dropzone
-    if (current) setTimeout(() => current.scroll({ top: current.scrollHeight, behavior: 'smooth' }), 150)
+    if (current) {
+      setTimeout(() => {
+        if (typeof Element.prototype.scroll !== 'undefined') {
+          current.scroll({ top: current.scrollHeight, behavior: 'smooth' })
+        } else if (current.scrollHeight > 0) {
+          current.scrollTop = current.scrollHeight
+        }
+      }, 150)
+    }
   }
 
   handleFile = async (file: File, id: string) => {
