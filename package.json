@@ -21,9 +21,6 @@
     "type": "git",
     "url": "git://github.com/MankiBusiness/react-dropzone-uploader.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "license": "MIT",
   "peerDependencies": {
     "prop-types": ">=15.5.10",
