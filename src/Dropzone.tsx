@@ -95,6 +95,8 @@ export interface IUploadParams {
   fields?: { [name: string]: string | Blob }
   headers?: { [name: string]: string }
   meta?: { [name: string]: any }
+  withCredentials?: boolean
+  responseType?: XMLHttpRequestResponseType
 }
 
 export type CustomizationFunction<T> = (allFiles: IFileWithMeta[], extra: IExtra) => T
@@ -512,7 +514,16 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
       console.error('Error Upload Params', e.stack)
     }
     if (params === null) return
-    const { url, method = 'POST', body, fields = {}, headers = {}, meta: extraMeta = {} } = params
+    const {
+      url,
+      method = 'POST',
+      body,
+      fields = {},
+      headers = {},
+      meta: extraMeta = {},
+      withCredentials = false,
+      responseType = 'text',
+    } = params
     delete extraMeta.status
 
     if (!url) {
@@ -525,6 +536,8 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
     const xhr = new XMLHttpRequest()
     const formData = new FormData()
     xhr.open(method, url, true)
+    xhr.withCredentials = withCredentials
+    xhr.responseType = responseType
 
     for (const field of Object.keys(fields)) formData.append(field, fields[field])
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
